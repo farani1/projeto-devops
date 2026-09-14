@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - semana3-ci-cd
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verificar-aplicacao:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo do repositorio
+        uses: actions/checkout@v4
+
+      - name: Verificar arquivos do projeto
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f README.md
+
+      - name: Verificar conteudo HTML
+        run: |
+          grep -q "<html" index.html
+          grep -q "</html>" index.html
+          grep -q "Projeto DevOps" index.html
+
+      - name: Confirmar CI
+        run: echo "CI executado com sucesso!"
