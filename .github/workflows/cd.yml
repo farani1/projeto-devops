@@ -1,0 +1,34 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+      - semana3-ci-cd
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  preparar-entrega:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo do repositorio
+        uses: actions/checkout@v4
+
+      - name: Criar pacote da aplicacao
+        run: |
+          mkdir dist
+          cp index.html dist/
+          cp style.css dist/
+          cp README.md dist/
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: projeto-devops
+          path: dist/
+
+      - name: Confirmar CD
+        run: echo "CD executado com sucesso!"
