@@ -1,0 +1,9 @@
+{
+    "name": "projeto-devops",
+    "version": "1.0.0",
+    "description": "Projeto desenvolvido para a disciplina de DevOps",
+    "main": "projeto.js",
+    "scripts": {
+        "test": "node --test"
+    }
+}
