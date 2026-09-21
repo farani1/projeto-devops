@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - semana6-alertas
+      - ajuste-alerta-discord
 
 jobs:
   enviar-alerta:
@@ -19,7 +20,23 @@ jobs:
           BRANCH: ${{ github.ref_name }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          curl -H "Content-Type: application/json" \
-          -X POST \
-          -d "{\"content\":\"🚀 **Alerta DevOps**\nRepositório: $REPOSITORY\nAutor: $ACTOR\nBranch: $BRANCH\nCommit: $COMMIT_MESSAGE\"}" \
-          "$DISCORD_WEBHOOK_URL"
+          PAYLOAD=$(jq -n \
+            --arg repository "$REPOSITORY" \
+            --arg actor "$ACTOR" \
+            --arg branch "$BRANCH" \
+            --arg commit "$COMMIT_MESSAGE" \
+            '{
+              content: (
+                "🚀 **Alerta DevOps**\n" +
+                "Repositório: " + $repository + "\n" +
+                "Autor: " + $actor + "\n" +
+                "Branch: " + $branch + "\n" +
+                "Commit: " + $commit
+              )
+            }')
+
+          curl --fail-with-body \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d "$PAYLOAD" \
+            "$DISCORD_WEBHOOK_URL"
