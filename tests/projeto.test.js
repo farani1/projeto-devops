@@ -29,6 +29,10 @@ test('deve identificar um número par', () => {
     assert.strictEqual(ehPar(8), true);
 });
 
+test('deve identificar um número ímpar', () => {
+    assert.strictEqual(ehPar(7), false);
+});
+
 test('deve gerar erro ao tentar dividir por zero', () => {
     assert.throws(
         () => dividir(10, 0),
