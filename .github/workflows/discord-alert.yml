@@ -1,0 +1,25 @@
+name: Alerta Discord
+
+on:
+  push:
+    branches:
+      - main
+      - semana6-alertas
+
+jobs:
+  enviar-alerta:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Enviar alerta para o Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          REPOSITORY: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          BRANCH: ${{ github.ref_name }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"content\":\"🚀 **Alerta DevOps**\nRepositório: $REPOSITORY\nAutor: $ACTOR\nBranch: $BRANCH\nCommit: $COMMIT_MESSAGE\"}" \
+          "$DISCORD_WEBHOOK_URL"
